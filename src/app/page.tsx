@@ -1,6 +1,25 @@
+import { cookies as NextCookies } from "next/headers";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+type User = { autorizado: boolean; usuario: string };
+
+const getUser = async () => {
+  const cookies = NextCookies();
+  const token = cookies.get("token")?.value;
+  if (!token) redirect("/login");
+  const response = await fetch("https://api.origamid.online/conta/perfil", {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  const dataUser = await response.json();
+  console.log("user: ", dataUser);
+  return dataUser as User;
+};
+export default async function Home() {
+  const user = await getUser();
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
