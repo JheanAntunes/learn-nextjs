@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { redirect, useRouter } from "next/navigation";
+import { Login } from "@/actions/action-login";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -42,16 +43,17 @@ export function ProfileForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    //request api to register user
-    const response = await fetch("http://localhost:3000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
-    const dataRegisterUser = await response.json();
-    console.log("user register: ", dataRegisterUser);
+    // //request api to register user
+    // const response = await fetch("http://localhost:3000/api/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(values),
+    // });
+    // const dataRegisterUser = await response.json();
+    // console.log("user register: ", dataRegisterUser);
+    const userLogin = await Login(values);
     router.push("/");
   }
   return (
